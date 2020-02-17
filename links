@@ -1,0 +1,13 @@
+Unsupervised Pixel-Level Domain Adaptation With Generative Adversarial Networks:
+https://www.youtube.com/watch?v=VhsTrWPvjcA
+
+Multi-Task Domain Adaptation for Deep Learning of Instance Grasping from Simulation:
+https://www.youtube.com/watch?v=BR5bgPxjvRM
+
+Papers with code: domain adaptation
+https://paperswithcode.com/task/domain-adaptation
+
+Practical implementations:
+https://github.com/eriklindernoren/Keras-GAN#pixelda
+https://github.com/eriklindernoren/Keras-GAN/tree/master/pixelda
+https://github.com/eriklindernoren/PyTorch-GAN
