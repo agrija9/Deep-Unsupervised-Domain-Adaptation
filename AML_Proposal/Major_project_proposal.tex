@@ -11,7 +11,7 @@
 
 \maketitle
 
-In this project we will study the  domain adaptation techniques being used in deep neural networks. 
+In this project we will study some domain adaptation techniques being used in deep neural networks. 
 
 It has been well proved that deep networks are efficient at extracting features from a given (source) labeled dataset. However, it is not always the case that they can generalize well to other (target) datasets which very often have a different underlying distribution.
 
@@ -19,7 +19,7 @@ An example of the limitations of a model is its lack of ability to classify obje
 
 In the context of neural networks, Deep CORAL \cite{sun2016deep} is an unsupervised convolution neural network  model that compensates for decrease in performance when there is a shift in domain by aligning the second-order-statistics (correlation of output layer activation) of source and target distributions. The authors introduce an end-to-end domain adaptation work flow using a loss function that consists of a classification loss and a “coral loss” that learns invariant features.
 
-Another unsupervised learning model for domain adaptation is PixDA \cite{bousmalis2017unsupervised}. In this work, the authors map representations from one domain to another at the pixel level using generative adversarial networks. The paper reports an improvement in domain adaptation from MNIST to MNIST-M of more than 30% over Deep CORAL and other SOTA methods.
+Another unsupervised learning model for domain adaptation is PixDA \cite{bousmalis2017unsupervised}. In this work, the authors map representations from one domain to another at the pixel level using generative adversarial networks. The paper reports an improvement in domain adaptation (classification tasks) from MNIST to MNIST-M of more than 30 \% over Deep CORAL and other SOTA methods.
 
 \section{Project Proposals}
 Our proposal consists in three possible avenues to work on domain adaptation using neural networks. 
