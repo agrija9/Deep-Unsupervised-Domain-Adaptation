@@ -25,3 +25,10 @@ def show_image(dataset, domain, image_class, image_name):
 def accuracy(prediction, target):
 	pass
 
+
+# data getters
+try:
+    from torch.hub import load_state_dict_from_url
+except ImportError:
+    from torch.utils.model_zoo import load_url as load_state_dict_from_url
+
