@@ -24,6 +24,7 @@ def CORAL_loss(source, target):
 	# take Frobenius norm (https://pytorch.org/docs/stable/torch.html)
 	loss = torch.norm(torch.mul((source_covariance-target_covariance),(source_covariance-target_covariance)), p="fro")
 	# loss = torch.norm(torch.mm((source_covariance-target_covariance),(source_covariance-target_covariance)), p="fro")
+	
 	loss = loss / (4*d*d)
 	
 	return loss
@@ -36,10 +37,20 @@ def compute_covariance(data):
 	:param data: torch tensor: input source/target data
 	"""
 
-	n = data.size(0) # data dimensions: nxd (this is Ns or Nt)
+	# data dimensions: nxd (this for Ns or Nt)
+	n = data.size(0)
 
-	ones_vector = torch.ones(n).resize(1, n) # 1xN dimensional vector
+	# proper matrix multiplication for right side of equation (2)
+	1_vector = torch.ones(n).resize(1, n) 	# 1xN dimensional vector (transposed)
+	1_onto_D = torch.mm(1_vector, data)
+	mult_right_terms = torch.mm(ones_times_D.t(), 1_onto_D)
+	mult_right_terms = torch.div(mult_right_terms, n) # element-wise divison
 
+	# matrix multiplication for left side of equation (2)
+	mult_left_terms = torch.mm(data.t(), data)
 
-	# proper matrix multiplication
+	covariance_matrix = 1/(n-1) * torch.add(mult_left_terms, -1*(mult_right_terms))
+
+	return covariance_matrix
+
 
