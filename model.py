@@ -1,16 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable, Function
-
-from utils import load_state_dict_from_url
+# from utils import load_state_dict_from_url
 from loss import CORAL_loss
-
-
-__all_ = ["AlexNet", "alexnet", "Alexnet"]
-
-model_urls = {
-    'alexnet': 'https://download.pytorch.org/models/alexnet-owt-4df8aa71.pth',
-}
 
 
 class DeepCORAL(nn.Module):
@@ -18,6 +13,7 @@ class DeepCORAL(nn.Module):
 	DeepCORAL network as defined in the paper.
 	Network architecture based on following repository:
     https://github.com/SSARCandy/DeepCORAL/blob/master/models.py
+    :param num_classes: int --> office dataset has 31 different classes
 	"""
 	def __init__(self, num_classes=1000):
 		super(DeepCORAL, self).__init__()
@@ -78,20 +74,3 @@ class AlexNet(nn.Module):
 		# x = x.view(x.size(0), 246 * 6 * 6)
 		x = self.classifier(x)
 		return x
-
-# define method that instantiates AlexNet object
-def alexnet(pretrained=False, progress=True, **kwargs):
-	r"""AlexNet model architecture from the
-    `"One weird trick..." <https://arxiv.org/abs/1404.5997>`_ paper.
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-
-    model = AlexNet(**kwargs)
-    if pretrained:
-    	state_dict = load_state_dict_from_url(model_urls['alexnet'],
-                                              progress=progress)
-
-    	model.load_state_dict(state_dict)
-    return model

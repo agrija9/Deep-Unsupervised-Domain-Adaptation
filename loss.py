@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import torch
+
+
 """
 Created on Saturday Feb 25 2020
 
 @authors: Alan Preciado, Santosh Muthireddy
 """
-import torch 
-
-
 def CORAL_loss(source, target):
 	"""
 	From the paper, the vectors that compose Ds and Dt are D-dimensional vectors.
@@ -20,13 +20,13 @@ def CORAL_loss(source, target):
 
 	source_covariance = compute_covariance(source)
 	target_covariance = compute_covariance(target)
-	
+
 	# take Frobenius norm (https://pytorch.org/docs/stable/torch.html)
 	loss = torch.norm(torch.mul((source_covariance-target_covariance),(source_covariance-target_covariance)), p="fro")
 	# loss = torch.norm(torch.mm((source_covariance-target_covariance),(source_covariance-target_covariance)), p="fro")
-	
+
 	loss = loss / (4*d*d)
-	
+
 	return loss
 
 
@@ -52,5 +52,3 @@ def compute_covariance(data):
 	covariance_matrix = 1/(n-1) * torch.add(mult_left_terms, -1*(mult_right_terms))
 
 	return covariance_matrix
-
-
