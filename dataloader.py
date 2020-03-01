@@ -79,7 +79,7 @@ def get_dataloader(dataset, batch_size, train_ratio=0.7):
 def get_office_dataloader(name_dataset, batch_size, train=True):
     """
     Creates dataloader for the datasets in office datasetself.
-    Makes use of get_mean_std_dataset to compute mean and std along the
+    Makes use of get_mean_std_dataset() to compute mean and std along the
     color channels for each dataset in office.
     """
     # Ideally compute mean and std with get_mean_std_dataset.py
@@ -94,6 +94,7 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
         print("test")
         raise ValueError("must introduce one of the three datasets in office")
 
+    # statistics of datasets
     mean_std = {
         "amazon":{
             "mean":[0.7923, 0.7862, 0.7841],
@@ -109,8 +110,10 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
         }
     }
 
+    # compose image transformations
     data_transforms = transforms.Compose([
             transforms.Resize((224, 224)),
+            transforms.CenterCrop(224),
             # transforms.RandomSizedCrop(224),
             # transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
@@ -118,9 +121,14 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
                                  std=mean_std[name_dataset]["std"])
         ])
 
+    # retrieve dataset using ImageFolder
+    # datasets.ImageFolder() command expects our data to be organized
+    # in the following way: root/label/picture.png
     dataset = datasets.ImageFolder(root=root_dir,
                                    transform=data_transforms)
 
+    # Dataloader is able to spit out random samples of our data,
+    # so our model won’t have to deal with the entire dataset every time.
     # note on shuffling in data loader:
     # https://stackoverflow.com/questions/54354465/impact-of-using-data-shuffling-in-pytorch-dataloader
     dataset_loader = DataLoader(dataset,

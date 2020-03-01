@@ -3,9 +3,9 @@
 
 import torch
 import torch.nn as nn
-from torch.autograd import Variable, Function
+# from torch.autograd import Variable, Function
 # from utils import load_state_dict_from_url
-from loss import CORAL_loss
+# from loss import CORAL_loss
 
 
 class DeepCORAL(nn.Module):
@@ -24,13 +24,13 @@ class DeepCORAL(nn.Module):
 		self.fc8.weight.data.normal_(0.0, 0.005)
 
 	def forward(self, source, target): # computes activations for BOTH domains
-        source = self.sharedNetwork(source)
-        source = self.fc8(source)
+		source = self.sharedNetwork(source)
+		source = self.fc8(source)
 
-        target = self.sharedNetwork(target)
-        target = self.fc8(target)
+		target = self.sharedNetwork(target)
+		target = self.fc8(target)
 
-        return source, target
+		return source, target
 
 
 class AlexNet(nn.Module):
@@ -40,6 +40,7 @@ class AlexNet(nn.Module):
 	"""
 	def __init__(self, num_classes=1000):
 		super(AlexNet, self).__init__()
+
 		self.features = nn.Sequential(
 			nn.Conv2d(in_channels=3, out_channels=64, kernel_size=11, stride=4, padding=2),
 			nn.ReLU(inplace=True),
@@ -55,7 +56,9 @@ class AlexNet(nn.Module):
 			nn.ReLU(inplace=True),
 			nn.MaxPool2d(kernel_size=3, stride=2),
 		)
+
 		self.avgpool = nn.AdaptiveAvgPool2d(output_size=(6,6))
+
 		self.classifier = nn.Sequential(
 			nn.Dropout(),
 			nn.Linear(256 * 6 * 6, 4096),

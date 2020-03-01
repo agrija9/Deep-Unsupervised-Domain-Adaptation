@@ -12,7 +12,7 @@ def get_mean_std_dataset(path_dataset):
 
     # data_domain = "amazon"
     # path_dataset = "datasets/office/%s/images" % data_domain
-
+    
     transform = transforms.Compose([
             transforms.Resize((224, 224)), # original image size 300x300 pixels
             transforms.ToTensor()])
