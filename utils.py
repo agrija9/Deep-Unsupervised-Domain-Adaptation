@@ -19,7 +19,7 @@ Created on Saturday Feb 22 2020
 
 @authors: Alan Preciado, Santosh Muthireddy
 """
-def load_pretrained_AlexNet(model):
+def load_pretrained_AlexNet(model, progress=True):
 # def alexnet(pretrained=False, progress=True, **kwargs):
     """
     AlexNet model architecture from the paper

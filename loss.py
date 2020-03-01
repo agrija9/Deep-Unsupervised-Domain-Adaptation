@@ -41,9 +41,9 @@ def compute_covariance(data):
 	n = data.size(0)
 
 	# proper matrix multiplication for right side of equation (2)
-	1_vector = torch.ones(n).resize(1, n) 	# 1xN dimensional vector (transposed)
-	1_onto_D = torch.mm(1_vector, data)
-	mult_right_terms = torch.mm(ones_times_D.t(), 1_onto_D)
+	ones_vector = torch.ones(n).resize(1, n) 	# 1xN dimensional vector (transposed)
+	one_onto_D = torch.mm(ones_vector, data)
+	mult_right_terms = torch.mm(one_onto_D.t(), one_onto_D)
 	mult_right_terms = torch.div(mult_right_terms, n) # element-wise divison
 
 	# matrix multiplication for left side of equation (2)
