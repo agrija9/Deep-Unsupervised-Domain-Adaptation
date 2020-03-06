@@ -3,9 +3,6 @@
 
 import torch
 import torch.nn as nn
-# from torch.autograd import Variable, Function
-# from utils import load_state_dict_from_url
-# from loss import CORAL_loss
 
 
 class DeepCORAL(nn.Module):

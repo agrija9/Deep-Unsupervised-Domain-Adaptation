@@ -7,12 +7,12 @@ def get_mean_std_dataset(path_dataset):
     """
     Function to compute mean and std of image dataset.
     Move batch_size param according to memory resources.
-    retrieved from: https://forums.fast.ai/t/image-normalization-in-pytorch/7534/7
+    based on: https://forums.fast.ai/t/image-normalization-in-pytorch/7534/7
     """
 
     # data_domain = "amazon"
     # path_dataset = "datasets/office/%s/images" % data_domain
-    
+
     transform = transforms.Compose([
             transforms.Resize((224, 224)), # original image size 300x300 pixels
             transforms.ToTensor()])

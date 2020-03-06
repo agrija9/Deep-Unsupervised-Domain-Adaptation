@@ -33,6 +33,7 @@ def load_pretrained_AlexNet(model, progress=True):
 	    'alexnet':'https://download.pytorch.org/models/alexnet-owt-4df8aa71.pth',
 	}
 
+	print("loading pre-trained model...")
 	state_dict = load_state_dict_from_url(model_url['alexnet'], progress=progress)
 	model_dict = model.state_dict() # check this one
 
@@ -42,7 +43,7 @@ def load_pretrained_AlexNet(model, progress=True):
 
 	model_dict.update(state_dict)
 	model.load_state_dict(state_dict)
-
+	print("loaded model correctly...")
 
 def save_model(model, path):
 	torch.save(model.state_dict(), path)

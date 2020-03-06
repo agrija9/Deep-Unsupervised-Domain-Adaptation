@@ -59,7 +59,7 @@ def get_dataloader(dataset, batch_size, train_ratio=0.7):
     # Generate random indices for train and val sets
     indices = torch.randperm(len(dataset))
     train_indices = get_subset(indices, 0, train_set_size)
-    validation_indices = get_subset(indices, train_set_size, validation_set_size)
+    validation_indices = get_subset(indices,train_set_size,validation_set_size)
     # test_indices = get_subset(indices,train_count+validation_count,len(dataset))
 
     # Create sampler objects
@@ -79,14 +79,12 @@ def get_dataloader(dataset, batch_size, train_ratio=0.7):
 def get_office_dataloader(name_dataset, batch_size, train=True):
     """
     Creates dataloader for the datasets in office datasetself.
-    Makes use of get_mean_std_dataset() to compute mean and std along the
-    color channels for each dataset in office.
+    Uses get_mean_std_dataset() to compute mean and std along the
+    color channels for the datasets in office.
     """
-    # Ideally compute mean and std with get_mean_std_dataset.py
-    # Values retrieved from:
-    # https://github.com/DenisDsh/PyTorch-Deep-CORAL/blob/master/data_loader.py
 
-    root_dir = "datasets/office/%s/images" % name_dataset
+    root_dir = "/content/office/%s/images" % name_dataset
+    # root_dir = "datasets/office/%s/images" % name_dataset
 
     __datasets__ = ["amazon", "dslr", "webcam"]
 
@@ -94,7 +92,8 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
         print("test")
         raise ValueError("must introduce one of the three datasets in office")
 
-    # statistics of datasets
+    # Ideally compute mean and std with get_mean_std_dataset.py
+    # https://github.com/DenisDsh/PyTorch-Deep-CORAL/blob/master/data_loader.py
     mean_std = {
         "amazon":{
             "mean":[0.7923, 0.7862, 0.7841],
@@ -129,8 +128,7 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
 
     # Dataloader is able to spit out random samples of our data,
     # so our model won’t have to deal with the entire dataset every time.
-    # note on shuffling in data loader:
-    # https://stackoverflow.com/questions/54354465/impact-of-using-data-shuffling-in-pytorch-dataloader
+    # shuffle data when training
     dataset_loader = DataLoader(dataset,
                                 batch_size=batch_size,
                                 shuffle=train,
