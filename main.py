@@ -12,6 +12,8 @@ import torch
 from torch.autograd import Variable
 warnings.filterwarnings("ignore")
 
+from train import train
+from test import test
 from loss import CORAL_loss
 from utils import load_pretrained_AlexNet, save_log, save_model, load_model
 from dataloader import get_office_dataloader
@@ -53,7 +55,7 @@ def main():
     parser.add_argument("--num_classes", default=31, type=int,
                         help="no. classes in dataset (default 31)")
 
-    parser.add_argument("--load_model", default=None, type=NoneType,
+    parser.add_argument("--load_model", default=None, type=None,
                         help="load pretrained model (default None)")
 
     args = parser.parse_args()
@@ -90,6 +92,8 @@ def main():
         load_model(model, args.load_model) # contains path to model params
     else:
         load_pretrained_AlexNet(model.sharedNetwork, progress=True)
+
+    print("model type:", type(model))
 
     # store statistics of train/test
     training_s_statistic = []
@@ -144,3 +148,7 @@ def main():
     save_log(testing_s_statistic, 'testing_s_statistic.pkl')
     save_log(testing_t_statistic, 'testing_t_statistic.pkl')
     save_model(model, 'checkpoint.tar')
+
+
+if __name__ == '__main__':
+    main()

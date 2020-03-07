@@ -4,10 +4,11 @@
 import torch
 from tqdm import tnrange
 from torch.autograd import Variable
+from loss import CORAL_loss
 
 
 def train(model, source_loader, target_loader,
-          optimizer, epoch, lambda_factor, cuda):
+          optimizer, epoch, lambda_factor, cuda=False):
     """
     This method fits the network params one epoch at a time.
     Implementation based on:
@@ -23,7 +24,9 @@ def train(model, source_loader, target_loader,
     # data_target: (batch_size)
     # source[0][1][0].size() --> torch.Size([128, 3, 224, 224])
 
-    source, target = list(enumerate(source_loader)), list(enumerate(target_loader))
+    # memory leakage
+    source = list(enumerate(source_loader))
+    target = list(enumerate(target_loader))
     train_steps = min(len(source), len(target))
 
     # start batch training

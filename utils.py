@@ -48,9 +48,9 @@ def load_pretrained_AlexNet(model, progress=True):
 
 def save_log(obj, path):
 	with open(path, 'wb') as f:
-        pickle.dump(obj, f)
-        print('[INFO] Object saved to {}'.format(path))
-		
+		pickle.dump(obj, f)
+		print('[INFO] Object saved to {}'.format(path))
+
 def save_model(model, path):
 	torch.save(model.state_dict(), path)
 	print("checkpoint saved in {}".format(path))
