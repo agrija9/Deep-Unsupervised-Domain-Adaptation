@@ -83,13 +83,13 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
     color channels for the datasets in office.
     """
 
-    root_dir = "/content/office/%s/images" % name_dataset
-    # root_dir = "datasets/office/%s/images" % name_dataset
+    # root dir (local pc or colab)
+    # root_dir = "/content/office/%s/images" % name_dataset
+    root_dir = "datasets/office/%s/images" % name_dataset
 
     __datasets__ = ["amazon", "dslr", "webcam"]
 
     if name_dataset not in __datasets__:
-        print("test")
         raise ValueError("must introduce one of the three datasets in office")
 
     # Ideally compute mean and std with get_mean_std_dataset.py

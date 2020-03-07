@@ -6,7 +6,7 @@ from tqdm import tnrange
 from torch.autograd import Variable
 
 
-def test(model, data_loader, epoch):
+def test(model, data_loader, epoch, cuda):
     """
     Computes classification accuracy of (labeled) data using cross-entropy.
     Retreived from: https://github.com/SSARCandy/DeepCORAL/blob/master/main.py
@@ -20,7 +20,7 @@ def test(model, data_loader, epoch):
 
     # go over dataloader batches, labels
     for data, label in data_loader:
-        if CUDA:
+        if cuda:
             data, label = data.cuda(), label.cuda()
 
         # note on volatile: https://stackoverflow.com/questions/49837638/what-is-volatile-variable-in-pytorch

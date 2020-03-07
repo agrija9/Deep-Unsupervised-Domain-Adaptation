@@ -6,7 +6,8 @@ from tqdm import tnrange
 from torch.autograd import Variable
 
 
-def train(model, optimizer, epoch, _lambda):
+def train(model, source_loader, target_loader,
+          optimizer, epoch, lambda_factor, cuda):
     """
     This method fits the network params one epoch at a time.
     Implementation based on:
@@ -32,8 +33,8 @@ def train(model, optimizer, epoch, _lambda):
         _, (source_data, source_label) = source[batch_idx]
         _, (target_data, _) = target[batch_idx] # unsupervised learning
 
-        print("CUDA:", CUDA)
-        if CUDA:
+        print("CUDA:", cuda)
+        if cuda:
             # move to device
             source_data = source_data.cuda()
             source_label = source_label.cuda()
@@ -56,7 +57,7 @@ def train(model, optimizer, epoch, _lambda):
         print(type(coral_loss))
 
         # compute total loss (equation 6 paper)
-        total_loss = classification_loss + _lambda*coral_loss
+        total_loss = classification_loss + lambda_factor*coral_loss
 
         # compute gradients of network (backprop in pytorch)
         total_loss.backward()
@@ -69,7 +70,7 @@ def train(model, optimizer, epoch, _lambda):
             'epoch': epoch,
             'step': batch_idx + 1,
             'total_steps': train_steps,
-            'lambda': _lambda,
+            'lambda': lambda_factor,
             'coral_loss': coral_loss.item(), # coral_loss.data[0],
             'classification_loss': classification_loss.item(),  # classification_loss.data[0],
             'total_loss': total_loss.item() # total_loss.data[0]
@@ -81,7 +82,7 @@ def train(model, optimizer, epoch, _lambda):
                   epoch,
                   batch_idx + 1,
                   train_steps,
-                  _lambda,
+                  lambda_factor,
                   classification_loss.item(), # classification_loss.data[0],
                   coral_loss.item(), # coral_loss.data[0],
                   total_loss.item() # total_loss.data[0]

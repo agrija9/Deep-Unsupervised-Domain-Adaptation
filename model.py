@@ -73,4 +73,5 @@ class AlexNet(nn.Module):
 		x = torch.flatten(x, 1) # flatten to input into classifier
 		# x = x.view(x.size(0), 246 * 6 * 6)
 		x = self.classifier(x)
+		
 		return x

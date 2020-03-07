@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from skimage import io
+import pickle
+import numpy as np
 import matplotlib.pyplot as plt
 import os
 import torch
 from torchvision import transforms, datasets
 # from torch.utils import model_zoo
-import numpy as np
-try: # import pytorch data getters
+try:
 	from torch.hub import load_state_dict_from_url
 except ImportError:
 	from torch.utils.model_zoo import load_url as load_state_dict_from_url
@@ -33,9 +34,9 @@ def load_pretrained_AlexNet(model, progress=True):
 	    'alexnet':'https://download.pytorch.org/models/alexnet-owt-4df8aa71.pth',
 	}
 
-	print("loading pre-trained model...")
+	print("loading pre-trained AlexNet...")
 	state_dict = load_state_dict_from_url(model_url['alexnet'], progress=progress)
-	model_dict = model.state_dict() # check this one
+	model_dict = model.state_dict()
 
 	# filter out unmatching dictionary
 	# reference: https://github.com/SSARCandy/DeepCORAL/blob/master/main.py
@@ -45,18 +46,21 @@ def load_pretrained_AlexNet(model, progress=True):
 	model.load_state_dict(state_dict)
 	print("loaded model correctly...")
 
+def save_log(obj, path):
+	with open(path, 'wb') as f:
+        pickle.dump(obj, f)
+        print('[INFO] Object saved to {}'.format(path))
+		
 def save_model(model, path):
 	torch.save(model.state_dict(), path)
 	print("checkpoint saved in {}".format(path))
-
 
 def load_model(model, path):
 	"""
 	Loads trained network params in case AlexNet params are not loaded.
 	"""
 	model.load_state_dict(torch.load(path))
-	print("checkpoint loaded from {}".format(path))
-
+	print("pre-trained model loaded from {}".format(path))
 
 def show_image(dataset, domain, image_class, image_name):
 	"""
@@ -66,11 +70,6 @@ def show_image(dataset, domain, image_class, image_name):
 	plt.imshow(image_file)
 	plt.pause(0.001)
 	plt.figure()
-
-
-def accuracy(prediction, target):
-	pass
-
 
 def get_mean_std_dataset(root_dir):
 	"""

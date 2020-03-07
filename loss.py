@@ -24,6 +24,7 @@ def CORAL_loss(source, target):
 	# take Frobenius norm (https://pytorch.org/docs/stable/torch.html)
 	loss = torch.norm(torch.mul((source_covariance-target_covariance),
 								(source_covariance-target_covariance)), p="fro")
+
 	# loss = torch.norm(torch.mm((source_covariance-target_covariance),
 	# 							(source_covariance-target_covariance)), p="fro")
 
@@ -41,7 +42,7 @@ def compute_covariance(data):
 	# data dimensions: nxd (this for Ns or Nt)
 	n = data.size(0) # get batch size
 
-  # check gpu or cpu
+  # check gpu or cpu support
 	if data.is_cuda:
 		device = torch.device("cuda")
 	else:
