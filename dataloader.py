@@ -84,8 +84,9 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
     """
 
     # root dir (local pc or colab)
-    # root_dir = "/content/office/%s/images" % name_dataset
-    root_dir = "datasets/office/%s/images" % name_dataset
+    root_dir = "/content/office/%s/images" % name_dataset
+    # root_dir = "datasets/office/%s/images" % name_dataset
+    # root_dir = "/content/drive/My Drive/office/%s/images" % name_dataset
 
     __datasets__ = ["amazon", "dslr", "webcam"]
 

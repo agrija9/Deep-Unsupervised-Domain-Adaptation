@@ -144,7 +144,7 @@ def main():
 
     # save results
     print("saving results...")
-    save_log(training_statistic, 'training_statistic.pkl')
+    save_log(training_s_statistic, 'training_s_statistic.pkl')
     save_log(testing_s_statistic, 'testing_s_statistic.pkl')
     save_log(testing_t_statistic, 'testing_t_statistic.pkl')
     save_model(model, 'checkpoint.tar')
