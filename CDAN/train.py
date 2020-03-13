@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from tqdm import tnrange
 from torch.autograd import Variable
-from loss import CDAN
+from loss import CDAN,DANN
 
 
 def train(model, ad_net, source_loader, target_loader,
@@ -16,8 +16,6 @@ def train(model, ad_net, source_loader, target_loader,
     https://github.com/SSARCandy/DeepCORAL/blob/master/main.py
     """
 
-    model.train()
-    ad_net.train()
 
     results = [] # list to append loss values at each epoch
 
@@ -27,7 +25,7 @@ def train(model, ad_net, source_loader, target_loader,
     # source[0][1][0].size() --> torch.Size([128, 3, 224, 224])
 
     # memory leakage
-    print("memory leak")
+    # print("memory leak")
     source = list(enumerate(source_loader))
     # print(source)
     target = list(enumerate(target_loader))
@@ -52,7 +50,7 @@ def train(model, ad_net, source_loader, target_loader,
         target_data = Variable(target_data)
 
         # reset to zero optimizer gradients
-        #optimizer.zero_grad()
+        optimizer.zero_grad()
 
         # do a forward pass through network (recall DeepCORAL outputs source, target activation maps)
         src_features, src_ouputs = model(source_data)
@@ -63,6 +61,7 @@ def train(model, ad_net, source_loader, target_loader,
         # compute losses (classification and coral loss)
         classification_loss = torch.nn.functional.cross_entropy(src_ouputs, source_label)
         cdan_loss = CDAN([features, softmax_out], ad_net)
+        # cdan_loss = DANN(features,ad_net)
 
         print(type(cdan_loss))
 
@@ -97,5 +96,5 @@ def train(model, ad_net, source_loader, target_loader,
                   cdan_loss.item(), # coral_loss.data[0],
                   total_loss.item() # total_loss.data[0]
               ))
-
+        # print(list(ad_net.parameters())[0].grad)
     return results

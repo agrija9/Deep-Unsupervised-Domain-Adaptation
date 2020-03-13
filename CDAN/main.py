@@ -18,7 +18,7 @@ from test import test
 from utils import load_pretrained_AlexNet, save_log, save_model, load_model
 from dataloader import get_office_dataloader
 from model import  AlexNet, AdversarialNetwork, baseNetwork
-
+import network
 
 # set model hyperparameters (paper page 5)
 CUDA = True if torch.cuda.is_available() else False
@@ -76,15 +76,17 @@ def main():
     # define DeepCORAL network
     bottleneck_dim = 256
     model = baseNetwork(num_classes=args.num_classes,bottleneck_dim=bottleneck_dim)
+    # model = network.AlexNetFc(use_bottleneck=True, bottleneck_dim=256, new_cls=True)
     ad_net = AdversarialNetwork(bottleneck_dim*args.num_classes,1024)
-
+    model.train(True)
+    ad_net.train(True)
     # define optimizer pytorch: https://pytorch.org/docs/stable/optim.html
     # specify learning rates per layers:
     # 10*learning_rate for last two fc layers according to paper
     optimizer = torch.optim.SGD([
         {"params": model.sharedNetwork.parameters()},
         {"params": model.fc8.parameters(), "lr":10*LEARNING_RATE},
-        {"params":ad_net.parameters()}
+        {"params":ad_net.parameters(), "lr_mult": 10, 'decay_mult': 2}
     ], lr=LEARNING_RATE, momentum=MOMENTUM)
 
     # move to CUDA if available

@@ -124,6 +124,7 @@ class AdversarialNetwork(nn.Module):
 		self.max_iter = 10000.0
 
 	def forward(self, x):
+		print("inside ad net forward",self.training)
 		if self.training:
 			self.iter_num += 1
 		coeff = calc_coeff(self.iter_num, self.high, self.low, self.alpha, self.max_iter)
