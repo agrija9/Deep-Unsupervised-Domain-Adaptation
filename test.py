@@ -35,15 +35,14 @@ def test(model, data_loader, epoch, cuda):
         pred = output.data.max(1, keepdim=True)[1]
         correct_class += pred.eq(label.data.view_as(pred)).cpu().sum()
 
-
     # compute test loss as correclty classified labels divided by total data size
     test_loss = test_loss/len(data_loader.dataset)
 
     # return dictionary containing info of each epoch
     return {
-        "epoch": epoch,
+        "epoch": epoch+1,
         "average_loss": test_loss,
-        "correct_class": correct_class,
+        "correct_class": correct_class.item(),
         "total_elems": len(data_loader.dataset),
-        "accuracy %": 100.*correct_class/len(data_loader.dataset)
+        "accuracy %": (100.*correct_class/len(data_loader.dataset)).item()
     }

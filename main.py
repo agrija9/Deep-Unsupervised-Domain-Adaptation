@@ -58,9 +58,12 @@ def main():
     parser.add_argument("--load_model", default=None, type=None,
                         help="load pretrained model (default None)")
 
+    parser.add_argument("--adapt_domain", default=True, type=bool,
+                        help="argument to compute coral loss (default True)")
+
     args = parser.parse_args()
 
-    # create dataloaders (Amazon as source and Webcam as target)
+    # create dataloaders (Amazon --> source, Webcam --> target)
     print("creating source/target dataloaders...")
     print("source data:", args.name_source)
     print("target data:", args.name_target)
@@ -96,7 +99,7 @@ def main():
     print("model type:", type(model))
 
     # store statistics of train/test
-    training_s_statistic = []
+    training_statistic = []
     testing_s_statistic = []
     testing_t_statistic = []
 
@@ -104,23 +107,27 @@ def main():
     print("running training for {} epochs...".format(args.epochs))
     for epoch in tnrange(0, args.epochs):
         # compute lambda value from paper (eq 6)
-        lambda_factor = (epoch+1)/args.epochs
+        if args.adapt_domain:
+            lambda_factor = (epoch+1)/args.epochs # adaptation (w/ coral loss)
+
+        else:
+            lambda_factor = 0 # no adaptation (w/o coral loss)
 
         # run batch trainig at each epoch (returns dictionary with epoch result)
         result_train = train(model, source_loader, target_loader,
                              optimizer, epoch+1, lambda_factor, CUDA)
 
         # print log values
-        print("[EPOCH] {}: Classification: {:.6f}, CORAL loss: {:.6f}, Total_Loss: {:.6f}".format(
+        print("[EPOCH] {}: Classification loss: {:.6f}, CORAL loss: {:.6f}, Total_Loss: {:.6f}".format(
                 epoch+1,
                 sum(row['classification_loss'] / row['total_steps'] for row in result_train),
                 sum(row['coral_loss'] / row['total_steps'] for row in result_train),
                 sum(row['total_loss'] / row['total_steps'] for row in result_train),
             ))
 
-        training_s_statistic.append(result_train)
+        training_statistic.append(result_train)
 
-        # perform testing simultaneously: classification accuracy on both dataset
+        # test classification accuracy on both datasets
         test_source = test(model, source_loader, epoch, CUDA)
         test_target = test(model, target_loader, epoch, CUDA)
         testing_s_statistic.append(test_source)
@@ -142,12 +149,20 @@ def main():
                 test_target['accuracy %'],
         ))
 
-    # save results
-    print("saving results...")
-    save_log(training_s_statistic, 'training_s_statistic.pkl')
-    save_log(testing_s_statistic, 'testing_s_statistic.pkl')
-    save_log(testing_t_statistic, 'testing_t_statistic.pkl')
-    save_model(model, 'checkpoint.tar')
+    # save log results
+    if args.adapt_domain:
+        print("saving training with adaptation...")
+        save_log(training_statistic, 'adaptation_training_statistic.pkl')
+        save_log(testing_s_statistic, 'adaptation_testing_s_statistic.pkl')
+        save_log(testing_t_statistic, 'adaptation_testing_t_statistic.pkl')
+        save_model(model, 'adaptation_checkpoint.tar')
+
+    else:
+        print("saving training without adaptation...")
+        save_log(training_statistic, 'no_adaptation_training_statistic.pkl')
+        save_log(testing_s_statistic, 'no_adaptation_testing_s_statistic.pkl')
+        save_log(testing_t_statistic, 'no_adaptation_testing_t_statistic.pkl')
+        save_model(model, 'no_adaptation_checkpoint.tar')
 
 
 if __name__ == '__main__':

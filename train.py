@@ -17,7 +17,7 @@ def train(model, source_loader, target_loader,
 
     model.train()
 
-    results = [] # list to append loss values at each epoch
+    results = [] # append loss values at each epoch
 
     # first cast into an iterable list the data loaders
     # data_source: (batch_size, channels, height, width)
@@ -56,8 +56,6 @@ def train(model, source_loader, target_loader,
         # compute losses (classification and coral loss)
         classification_loss = torch.nn.functional.cross_entropy(output1, source_label)
         coral_loss = CORAL_loss(output1, output2)
-
-        print(type(coral_loss))
 
         # compute total loss (equation 6 paper)
         total_loss = classification_loss + lambda_factor*coral_loss
