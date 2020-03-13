@@ -25,7 +25,7 @@ def test(model, data_loader, epoch, cuda):
 
         # note on volatile: https://stackoverflow.com/questions/49837638/what-is-volatile-variable-in-pytorch
         data, label = Variable(data, volatile=True), Variable(label)
-        output, _ = model(data, data) # just use one ouput of DeepCORAL
+        _, output = model(data) # just use one ouput of DeepCORAL
 
         # sum batch loss when computing classification
         test_loss += torch.nn.functional.cross_entropy(output, label, size_average=False).item()

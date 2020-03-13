@@ -98,7 +98,7 @@ class AlexNet(nn.Module):
 		x = torch.flatten(x, 1) # flatten to input into classifier
 		# x = x.view(x.size(0), 246 * 6 * 6)
 		x = self.classifier(x)
-		
+
 		return x
 
 class AdversarialNetwork(nn.Module):
@@ -145,6 +145,3 @@ class AdversarialNetwork(nn.Module):
 
 	def get_parameters(self):
 		return [{"params": self.parameters(), "lr_mult": 10, 'decay_mult': 2}]
-
-
-

@@ -68,10 +68,10 @@ def get_dataloader(dataset, batch_size, train_ratio=0.7):
 
     # Create data loaders
     train_loader = DataLoader(dataset, batch_size=batch_size,
-                              sampler=train_sampler, num_workers=4)
+                              sampler=train_sampler, num_workers=0)
 
     val_loader = DataLoader(dataset, batch_size=batch_size,
-                            sampler=val_sampler, num_workers=4)
+                            sampler=val_sampler, num_workers=0)
 
     return train_loader, val_loader
 
@@ -133,6 +133,6 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
     dataset_loader = DataLoader(dataset,
                                 batch_size=batch_size,
                                 shuffle=train,
-                                num_workers=4)
+                                num_workers=0)
 
     return dataset_loader

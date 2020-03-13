@@ -22,6 +22,7 @@ from model import  AlexNet, AdversarialNetwork, baseNetwork
 
 # set model hyperparameters (paper page 5)
 CUDA = True if torch.cuda.is_available() else False
+CUDA = False
 LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 5e-4
 MOMENTUM = 0.9

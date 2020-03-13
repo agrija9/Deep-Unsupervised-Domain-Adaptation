@@ -16,8 +16,8 @@ def train(model, ad_net, source_loader, target_loader,
     https://github.com/SSARCandy/DeepCORAL/blob/master/main.py
     """
 
-    model.train(True)
-    ad_net.train(True)
+    model.train()
+    ad_net.train()
 
     results = [] # list to append loss values at each epoch
 
@@ -27,7 +27,9 @@ def train(model, ad_net, source_loader, target_loader,
     # source[0][1][0].size() --> torch.Size([128, 3, 224, 224])
 
     # memory leakage
+    print("memory leak")
     source = list(enumerate(source_loader))
+    # print(source)
     target = list(enumerate(target_loader))
     train_steps = min(len(source), len(target))
 
@@ -50,7 +52,7 @@ def train(model, ad_net, source_loader, target_loader,
         target_data = Variable(target_data)
 
         # reset to zero optimizer gradients
-        optimizer.zero_grad()
+        #optimizer.zero_grad()
 
         # do a forward pass through network (recall DeepCORAL outputs source, target activation maps)
         src_features, src_ouputs = model(source_data)
