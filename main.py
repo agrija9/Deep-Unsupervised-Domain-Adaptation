@@ -58,8 +58,8 @@ def main():
     parser.add_argument("--load_model", default=None, type=None,
                         help="load pretrained model (default None)")
 
-    parser.add_argument("--adapt_domain", default=True, type=bool,
-                        help="argument to compute coral loss (default True)")
+    parser.add_argument("--adapt_domain", action='store_true',
+                        help="argument to compute coral loss (default False)")
 
     args = parser.parse_args()
 
@@ -104,6 +104,7 @@ def main():
     testing_t_statistic = []
 
     # start training over epochs
+    print("adapt domain:", args.adapt_domain)
     print("running training for {} epochs...".format(args.epochs))
     for epoch in tnrange(0, args.epochs):
         # compute lambda value from paper (eq 6)
