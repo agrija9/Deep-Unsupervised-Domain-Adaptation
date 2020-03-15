@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# TODO: improve accuracy plot (check paper and code)
+# TODO: write code for average accuracy (Table 1 paper)
+# TODO: try another method
+# TODO: plot function in main
+# TODO: merge santosh-dev branch (each method in one folder)
+# TODO: add repo README
+# TODO: write report
+
 from __future__ import division
 import argparse
 import warnings
@@ -25,10 +33,11 @@ MOMENTUM = 0.9
 
 def main():
     """
-    This method puts all the modules together to train a neural network
-    classifier using CORAL loss.
+    This method puts all the modules together to train DeepCORAL for image
+    classification. It uses a CORAL loss in the last classification layer for
+    domain adaptation.
 
-    Reference: https://arxiv.org/abs/1607.01719
+    Paper: https://arxiv.org/abs/1607.01719
     """
     parser = argparse.ArgumentParser(description="domain adaptation w CORAL")
 
@@ -69,10 +78,10 @@ def main():
     target_loader = get_office_dataloader(name_dataset = args.name_target,
                                           batch_size = args.batch_size_target)
 
-    # define DeepCORAL network
+    # define DeepCORAL model
     model = DeepCORAL(num_classes=args.num_classes)
 
-    # define optimizer pytorch: https://pytorch.org/docs/stable/optim.html
+    # define optimizer: https://pytorch.org/docs/stable/optim.html
     # specify learning rates per layers:
     # 10*learning_rate for last two fc layers according to paper
     optimizer = torch.optim.SGD([

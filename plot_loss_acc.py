@@ -97,7 +97,7 @@ def plot_loss_acc(source, target, no_epochs):
     plt.show()
     fig.savefig(path + "/webcam_to_amazon_test_train_accuracies.jpg")
 
-    # plot accuracies for test data in source and target domains
+    # plot losses for test data in source and target domains
     fig=plt.figure(figsize=(8, 6), dpi=100)
     fig.show()
 
