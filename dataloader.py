@@ -133,6 +133,7 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
     dataset_loader = DataLoader(dataset,
                                 batch_size=batch_size,
                                 shuffle=train,
-                                num_workers=4)
+                                num_workers=4,
+                                drop_last=True)
 
     return dataset_loader

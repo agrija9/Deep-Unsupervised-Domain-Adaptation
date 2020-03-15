@@ -41,6 +41,7 @@ def compute_covariance(data):
 
 	# data dimensions: nxd (this for Ns or Nt)
 	n = data.size(0) # get batch size
+	print("compute covariance bath size n:", n)
 
   # check gpu or cpu support
 	if data.is_cuda:

@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-#TODO: get curves
-# TODO: try different combinations among datasets
-
 from __future__ import division
 import argparse
 import warnings
@@ -25,8 +22,6 @@ CUDA = True if torch.cuda.is_available() else False
 LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 5e-4
 MOMENTUM = 0.9
-# BATCH_SIZE = [32, 32] # batch_s, batch_t [128, 56]
-# EPOCHS = 1
 
 def main():
     """
