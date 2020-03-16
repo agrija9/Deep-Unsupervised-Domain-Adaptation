@@ -3,6 +3,7 @@
 
 # TODO: improve accuracy plot (check paper and code)
 # TODO: write code for average accuracy (Table 1 paper)
+# TODO: run other 5 variations
 # TODO: try another method
 # TODO: plot function in main
 # TODO: merge santosh-dev branch (each method in one folder)
