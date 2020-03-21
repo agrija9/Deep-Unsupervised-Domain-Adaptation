@@ -5,36 +5,40 @@ import torch
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import pickle
 from pathlib import Path
+import argparse
 
 
 """
 Created on Friday Mar 13 2020
-
+Modified on Saturday Mar 21 2020
 @authors: Alan Preciado, Santosh Muthireddy
 """
 def plot_loss_acc(source, target, no_epochs):
 
     # specify path where in log folder where training logs are saved
-    path = Path("/logs/" + source + "_to_" + target + "/" + no_epochs)
+    pkldir = os.path.join("logs", source + "_to_" + target,
+                          str(no_epochs) + "_epochs_128_s_128_t_batch_size")
 
-    if path.is_dir():
-        print("path to pkl log files:", path)
+    if Path(pkldir).is_dir():
+        print("directory with pkl files is:", pkldir)
 
     else:
-        print("folder with pkl data does not exist, must trrain model")
+        print("folder with pkl data does not exist, must train model")
         return None
 
     # load dictionaries with log information
-    path_adapt_log = [path + "/adaptation_training_statistic.pkl",
-                      path + "/adaptation_testing_s_statistic.pkl",
-                      path + "/adaptation_testing_t_statistic.pkl"]
+    path_adapt_log = [pkldir + "/adaptation_training_statistic.pkl",
+                      pkldir + "/adaptation_testing_s_statistic.pkl",
+                      pkldir + "/adaptation_testing_t_statistic.pkl"]
 
-    path_no_adapt_log = [path + "/no_adaptation_training_statistic.pkl",
-                         path + "/no_adaptation_training_statistic.pkl",
-                         path + "/no_adaptation_training_statistic.pkl"]
+    path_no_adapt_log = [pkldir + "/no_adaptation_training_statistic.pkl",
+                         pkldir + "/no_adaptation_testing_s_statistic.pkl",
+                         pkldir + "/no_adaptation_testing_t_statistic.pkl"]
 
+    print(">>>Loading pkl files<<<")
     adapt_training_dict = pickle.load(open(path_adapt_log[0], 'rb'))
     adapt_testing_source_dict = pickle.load(open(path_adapt_log[1], 'rb'))
     adapt_testing_target_dict = pickle.load(open(path_adapt_log[2], 'rb'))
@@ -42,6 +46,10 @@ def plot_loss_acc(source, target, no_epochs):
     no_adapt_training_dict = pickle.load(open(path_no_adapt_log[0], 'rb'))
     no_adapt_testing_source_dict = pickle.load(open(path_no_adapt_log[1], 'rb'))
     no_adapt_testing_target_dict = pickle.load(open(path_no_adapt_log[2], 'rb'))
+    print(">>>pkl files loaded correctly<<<")
+
+    print(np.shape(adapt_testing_source_dict))
+    print(np.shape(no_adapt_testing_source_dict))
 
     # create dictionary structures for adaptation and no-adaptation results
 
@@ -95,14 +103,15 @@ def plot_loss_acc(source, target, no_epochs):
     plt.legend(loc="best")
     plt.grid()
     plt.show()
-    fig.savefig(path + "/webcam_to_amazon_test_train_accuracies.jpg")
+    source + "_to_" + target
+    fig.savefig(os.path.join(pkldir, source + "_to_" + target + "_test_train_accuracies.jpg"))
 
     # plot losses for test data in source and target domains
     fig=plt.figure(figsize=(8, 6), dpi=100)
     fig.show()
 
     plt.xlabel("epochs", fontsize=15)
-    plt.ylabel("classification accuracy (%)", fontsize=15)
+    plt.ylabel("loss", fontsize=15)
 
     plt.plot(adaptation["classification_loss"], label="classification_loss", marker='*', markersize=8)
     plt.plot(adaptation["coral_loss"], label="coral_loss", marker='.', markersize=8)
@@ -110,4 +119,24 @@ def plot_loss_acc(source, target, no_epochs):
     plt.legend(loc="best")
     plt.grid()
     plt.show()
-    fig.savefig(path + "/webcam_to_amazon_train_losses.jpg")
+    fig.savefig(os.path.join(pkldir, source + "_to_" + target + "_train_losses.jpg"))
+
+
+def main():
+    parser = argparse.ArgumentParser(description="plots DeepCORAL")
+
+    parser.add_argument("--source", default="amazon", type=str,
+                        help="source data")
+
+    parser.add_argument("--target", default="dslr", type=str,
+                        help="target data")
+
+    parser.add_argument("--no_epochs", default=100, type=int)
+
+    args = parser.parse_args()
+
+    plot_loss_acc(source=args.source, target=args.target, no_epochs=args.no_epochs)
+
+
+if __name__ == "__main__":
+    main()
