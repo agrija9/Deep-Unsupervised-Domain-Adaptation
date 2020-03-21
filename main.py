@@ -4,7 +4,7 @@
 # TODO: implement DDC
 # TODO: write code for average accuracy (Table 1 paper)
 # TODO: merge santosh-dev branch (each method in one folder)
-# TODO: add repo README
+# TODO: fill README and create appropriate instructions and name for repository
 # TODO: write report
 
 from __future__ import division
