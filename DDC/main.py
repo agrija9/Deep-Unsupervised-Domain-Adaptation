@@ -4,6 +4,7 @@
 from __future__ import division
 import argparse
 import warnings
+import math
 from tqdm import tnrange
 import torch
 from torch.autograd import Variable
@@ -130,10 +131,10 @@ def main():
                              optimizer, epoch+1, lambda_factor, CUDA)
 
         # print log values
-        print("[EPOCH] {}: Classification loss: {:.6f}, CORAL loss: {:.6f}, Total_Loss: {:.6f}".format(
+        print("[EPOCH] {}: Classification loss: {:.6f}, DDC loss: {:.6f}, Total_Loss: {:.6f}".format(
                 epoch+1,
                 sum(row['classification_loss'] / row['total_steps'] for row in result_train),
-                sum(row['coral_loss'] / row['total_steps'] for row in result_train),
+                sum(row['ddc_loss'] / row['total_steps'] for row in result_train),
                 sum(row['total_loss'] / row['total_steps'] for row in result_train),
             ))
 

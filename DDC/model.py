@@ -11,7 +11,7 @@ class DDCNet(nn.Module):
     :param num_classes: int --> office dataset has 31 different classes
 	"""
 	def __init__(self, num_classes=1000):
-		super(DDCNetwork, self).__init__()
+		super(DDCNet, self).__init__()
 		self.sharedNetwork = AlexNet()
 
 		self.bottleneck = nn.Sequential(
@@ -25,7 +25,7 @@ class DDCNet(nn.Module):
 			nn.Linear(256, num_classes)
 		)
 
-		self.fc8.weight.data.normal_(0.0, 0.005)
+		# self.fc8.weight.data.normal_(0.0, 0.005)
 
 	def forward(self, source, target): # computes activations for BOTH domains
 		source = self.sharedNetwork(source)

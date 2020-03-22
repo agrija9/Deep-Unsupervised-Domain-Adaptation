@@ -4,7 +4,7 @@
 import torch
 from tqdm import tnrange
 from torch.autograd import Variable
-from loss import CORAL_loss
+from loss import DDC_loss
 
 
 def train(model, source_loader, target_loader,
@@ -70,20 +70,20 @@ def train(model, source_loader, target_loader,
             'step': batch_idx + 1,
             'total_steps': train_steps,
             'lambda': lambda_factor,
-            'coral_loss': coral_loss.item(), # coral_loss.data[0],
+            'ddc_loss': ddc_loss.item(), # coral_loss.data[0],
             'classification_loss': classification_loss.item(),  # classification_loss.data[0],
             'total_loss': total_loss.item() # total_loss.data[0]
         })
 
         # print training info
         print('Train Epoch: {:2d} [{:2d}/{:2d}]\t'
-              'Lambda value: {:.4f}, Classification loss: {:.6f}, CORAL loss: {:.6f}, Total_Loss: {:.6f}'.format(
+              'Lambda value: {:.4f}, Classification loss: {:.6f}, ddc_loss: {:.6f}, Total_Loss: {:.6f}'.format(
                   epoch,
                   batch_idx + 1,
                   train_steps,
                   lambda_factor,
                   classification_loss.item(), # classification_loss.data[0],
-                  coral_loss.item(), # coral_loss.data[0],
+                  ddc_loss.item(), # coral_loss.data[0],
                   total_loss.item() # total_loss.data[0]
               ))
 
