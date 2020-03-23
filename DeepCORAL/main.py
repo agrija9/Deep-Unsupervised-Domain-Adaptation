@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# TODO: implement DDC
-# TODO: write code for average accuracy (Table 1 paper)
-# TODO: merge santosh-dev branch (each method in one folder)
 # TODO: fill README and create appropriate instructions and name for repository
 # TODO: write report
 
