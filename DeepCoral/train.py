@@ -26,11 +26,13 @@ def train(model, source_loader, target_loader,
 
     # memory leakage
     source = list(enumerate(source_loader))
+    # for i,j in enumerate(source_loader):
+    #     print(i,j)
     target = list(enumerate(target_loader))
     train_steps = min(len(source), len(target))
 
     # start batch training
-    for batch_idx in tnrange(train_steps):
+    for batch_idx in range(train_steps):
         # fetch data in batches
         # _, source_data -> torch.Size([128, 3, 224, 224]), labels -> torch.Size([128])
         _, (source_data, source_label) = source[batch_idx]

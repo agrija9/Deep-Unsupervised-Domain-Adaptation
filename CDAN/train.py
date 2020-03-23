@@ -5,7 +5,8 @@ import torch
 import torch.nn as nn
 from tqdm import tnrange
 from torch.autograd import Variable
-from loss import CDAN,DANN
+from loss import CDAN,DANN, Entropy
+from model import calc_coeff
 
 
 def train(model, ad_net, source_loader, target_loader,
@@ -36,6 +37,7 @@ def train(model, ad_net, source_loader, target_loader,
         # fetch data in batches
         # _, source_data -> torch.Size([128, 3, 224, 224]), labels -> torch.Size([128])
         _, (source_data, source_label) = source[batch_idx]
+        print(source_label)
         _, (target_data, _) = target[batch_idx] # unsupervised learning
 
         print("CUDA:", cuda)
@@ -58,15 +60,19 @@ def train(model, ad_net, source_loader, target_loader,
         features = torch.cat((src_features, tgt_features), dim=0)
         outputs = torch.cat((src_ouputs, tgt_ouputs), dim=0)
         softmax_out = nn.Softmax(dim=1)(outputs)
+        entropy = Entropy(softmax_out)
+        # transfer_loss = CDAN([features, softmax_out], ad_net, entropy, calc_coeff(batch_idx), None)
+
         # compute losses (classification and coral loss)
         classification_loss = torch.nn.functional.cross_entropy(src_ouputs, source_label)
-        cdan_loss = CDAN([features, softmax_out], ad_net)
-        # cdan_loss = DANN(features,ad_net)
+        transfer_loss = CDAN([features, softmax_out], ad_net)
+        # transfer_loss = DANN(features,ad_net)
 
-        print(type(cdan_loss))
+        # print(type(transfer_loss))
 
         # compute total loss (equation 6 paper)
-        total_loss = classification_loss + lambda_factor*cdan_loss
+        total_loss = classification_loss + lambda_factor*transfer_loss
+        # total_loss = classification_loss
 
         # compute gradients of network (backprop in pytorch)
         total_loss.backward()
@@ -80,7 +86,7 @@ def train(model, ad_net, source_loader, target_loader,
             'step': batch_idx + 1,
             'total_steps': train_steps,
             'lambda': lambda_factor,
-            'coral_loss': cdan_loss.item(), # coral_loss.data[0],
+            'cdan_loss': transfer_loss.item(), # coral_loss.data[0],
             'classification_loss': classification_loss.item(),  # classification_loss.data[0],
             'total_loss': total_loss.item() # total_loss.data[0]
         })
@@ -93,7 +99,7 @@ def train(model, ad_net, source_loader, target_loader,
                   train_steps,
                   lambda_factor,
                   classification_loss.item(), # classification_loss.data[0],
-                  cdan_loss.item(), # coral_loss.data[0],
+                  transfer_loss.item(), # coral_loss.data[0],
                   total_loss.item() # total_loss.data[0]
               ))
         # print(list(ad_net.parameters())[0].grad)

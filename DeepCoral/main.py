@@ -17,11 +17,12 @@ from test import test
 from loss import CORAL_loss
 from utils import load_pretrained_AlexNet, save_log, save_model, load_model
 from dataloader import get_office_dataloader
-from model import DeepCORAL, AlexNet, AdversarialNetwork, baseNetwork
+from model import DeepCORAL, AlexNet
 
 
 # set model hyperparameters (paper page 5)
 CUDA = True if torch.cuda.is_available() else False
+CUDA = False
 LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 5e-4
 MOMENTUM = 0.9
@@ -103,7 +104,7 @@ def main():
 
     # start training over epochs
     print("running training for {} epochs...".format(args.epochs))
-    for epoch in tnrange(0, args.epochs):
+    for epoch in range(0, args.epochs):
         # compute lambda value from paper (eq 6)
         lambda_factor = (epoch+1)/args.epochs
 

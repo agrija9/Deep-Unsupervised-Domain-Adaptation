@@ -108,6 +108,7 @@ class AdversarialNetwork(nn.Module):
     """
 	def __init__(self, in_feature, hidden_size):
 		super(AdversarialNetwork, self).__init__()
+		# print(hidden_size)
 		self.ad_layer1 = nn.Linear(in_feature, hidden_size)
 		self.ad_layer2 = nn.Linear(hidden_size, hidden_size)
 		self.ad_layer3 = nn.Linear(hidden_size, 1)
@@ -125,6 +126,7 @@ class AdversarialNetwork(nn.Module):
 
 	def forward(self, x):
 		print("inside ad net forward",self.training)
+		print(x.size())
 		if self.training:
 			self.iter_num += 1
 		coeff = calc_coeff(self.iter_num, self.high, self.low, self.alpha, self.max_iter)
