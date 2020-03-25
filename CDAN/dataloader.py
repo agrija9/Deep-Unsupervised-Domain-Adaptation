@@ -126,7 +126,6 @@ def get_office_dataloader(name_dataset, batch_size, train=True):
     # in the following way: root/label/picture.png
     dataset = datasets.ImageFolder(root=root_dir,
                                    transform=data_transforms)
-    print(dataset)
     # Dataloader is able to spit out random samples of our data,
     # so our model won’t have to deal with the entire dataset every time.
     # shuffle data when training
