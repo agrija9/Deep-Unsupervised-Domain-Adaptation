@@ -41,10 +41,10 @@ def main():
     parser.add_argument("--epochs", default=10, type=int,
                         help="number of training epochs")
 
-    parser.add_argument("--batch_size_source", default=128, type=int,
+    parser.add_argument("--batch_size_source", default=10, type=int,
                         help="batch size of source data")
 
-    parser.add_argument("--batch_size_target", default=128, type=int,
+    parser.add_argument("--batch_size_target", default=10, type=int,
                         help="batch size of target data")
 
     parser.add_argument("--name_source", default="amazon", type=str,
@@ -88,6 +88,11 @@ def main():
         {"params": model.fc8.parameters(), "lr":10*LEARNING_RATE},
         {"params":ad_net.parameters(), "lr_mult": 10, 'decay_mult': 2}
     ], lr=LEARNING_RATE, momentum=MOMENTUM)
+    # optimizer = torch.optim.SGD([
+    #     {"params": model.sharedNetwork.parameters()},
+    #     {"params": model.fc8.parameters(), "lr":10*LEARNING_RATE},
+    # ], lr=LEARNING_RATE, momentum=MOMENTUM)
+
 
     # move to CUDA if available
     if CUDA:
@@ -121,7 +126,7 @@ def main():
         print("[EPOCH] {}: Classification: {:.6f}, CDAN loss: {:.6f}, Total_Loss: {:.6f}".format(
                 epoch+1,
                 sum(row['classification_loss'] / row['total_steps'] for row in result_train),
-                sum(row['coral_loss'] / row['total_steps'] for row in result_train),
+                sum(row['cdan_loss'] / row['total_steps'] for row in result_train),
                 sum(row['total_loss'] / row['total_steps'] for row in result_train),
             ))
 
@@ -151,9 +156,12 @@ def main():
 
     # save results
     print("saving results...")
-    save_log(training_s_statistic, 'training_s_statistic.pkl')
-    save_log(testing_s_statistic, 'testing_s_statistic.pkl')
-    save_log(testing_t_statistic, 'testing_t_statistic.pkl')
+    # save_log(training_s_statistic, 'CDAN_amz_dslr/no_adaptation_training_s_statistic.pkl')
+    # save_log(testing_s_statistic, 'CDAN_amz_dslr/no_adaptation_testing_s_statistic.pkl')
+    # save_log(testing_t_statistic, 'CDAN_amz_dslr/no_adaptation_testing_t_statistic.pkl')
+    save_log(training_s_statistic, 'CDAN_amz_dslr/training_s_statistic.pkl')
+    save_log(testing_s_statistic, 'CDAN_amz_dslr/testing_s_statistic.pkl')
+    save_log(testing_t_statistic, 'CDAN_amz_dslr/testing_t_statistic.pkl')
     save_model(model, 'checkpoint.tar')
 
 
