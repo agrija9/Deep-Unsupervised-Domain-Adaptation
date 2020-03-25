@@ -103,7 +103,7 @@ def plot_loss_acc(source, target, no_epochs):
     plt.legend(loc="best")
     plt.grid()
     plt.show()
-    source + "_to_" + target
+    fig.suptitle(source + "_to_" + target)
     fig.savefig(os.path.join(pkldir, source + "_to_" + target + "_test_train_accuracies.jpg"))
 
     # plot losses for test data in source and target domains
@@ -119,6 +119,7 @@ def plot_loss_acc(source, target, no_epochs):
     plt.legend(loc="best")
     plt.grid()
     plt.show()
+    fig.suptitle(source + "_to_" + target)
     fig.savefig(os.path.join(pkldir, source + "_to_" + target + "_train_losses.jpg"))
 
 
