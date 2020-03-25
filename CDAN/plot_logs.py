@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 import argparse
-
+import numpy
 
 def plot_loss_acc(root_dir,source,target,method):
   path_adapt_log = [root_dir+"/training_s_statistic.pkl",
@@ -68,7 +68,7 @@ def plot_loss_acc(root_dir,source,target,method):
     # # store accuracies in no-adaptation dictionary
     no_adaptation["source_accuracy"].append(no_adapt_testing_source_dict[epoch_idx]["accuracy %"])
     no_adaptation["target_accuracy"].append(no_adapt_testing_target_dict[epoch_idx]["accuracy %"])
-
+  print(np.mean(adaptation['target_accuracy']),np.std(adaptation['target_accuracy']))
   # plot accuracies for test data in source and target domains
   fig=plt.figure(figsize=(8, 6), dpi=100)
   fig.show()
@@ -108,7 +108,7 @@ def plot_loss_acc(root_dir,source,target,method):
 
 def main():
     parser = argparse.ArgumentParser(description="plots graphs for CDAN and CDAN+E transfer loss ")
-    parser.add_argument("--root_dir",default="CDAN_amz_dslr", type=str)
+    parser.add_argument("--root_dir",default="CDAN/amazon_to_dslr", type=str)
     parser.add_argument("--source", default="amazon", type=str,
                         help="source data")
 
