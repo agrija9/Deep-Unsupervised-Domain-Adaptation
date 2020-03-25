@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-#TODO: get curves
-# TODO: try different combinations among datasets
-
 from __future__ import division
 import argparse
 import warnings
+import math
 from tqdm import tnrange
 import torch
 from torch.autograd import Variable
@@ -14,37 +12,46 @@ warnings.filterwarnings("ignore")
 
 from train import train
 from test import test
-#from loss import CORAL_loss
+from loss import DDC_loss
 from utils import load_pretrained_AlexNet, save_log, save_model, load_model
 from dataloader import get_office_dataloader
-from model import  AlexNet, AdversarialNetwork, baseNetwork
-import network
+from model import DDCNet, AlexNet
+
 
 # set model hyperparameters (paper page 5)
 CUDA = True if torch.cuda.is_available() else False
-CUDA = False
-LEARNING_RATE = 1e-3
-WEIGHT_DECAY = 5e-4
+learning_rate = 1e-3
+L2_DECAY = 5e-4
 MOMENTUM = 0.9
-# BATCH_SIZE = [32, 32] # batch_s, batch_t [128, 56]
-# EPOCHS = 1
+
+def step_decay(epoch, learning_rate):
+    """
+    Schedule step decay of learning rate with epochs.
+    """
+    initial_learning_rate = learning_rate
+    drop = 0.8
+    epochs_drop = 10.0
+    learning_rate = initial_learning_rate * math.pow(drop, math.floor((1 + epoch) / epochs_drop))
+
+    return learning_rate
 
 def main():
     """
-    This method puts all the modules together to train a neural network
-    classifier using CORAL loss.
+    This method puts all the modules together to train DDCNet for image
+    classification. It uses a MMD loss in the last classification layer for
+    domain adaptation.
 
-    Reference: https://arxiv.org/abs/1607.01719
+    Paper: https://arxiv.org/abs/1412.3474
     """
-    parser = argparse.ArgumentParser(description="domain adaptation w CORAL")
+    parser = argparse.ArgumentParser(description="domain adaptation w MMD")
 
     parser.add_argument("--epochs", default=10, type=int,
                         help="number of training epochs")
 
-    parser.add_argument("--batch_size_source", default=10, type=int,
+    parser.add_argument("--batch_size_source", default=128, type=int,
                         help="batch size of source data")
 
-    parser.add_argument("--batch_size_target", default=10, type=int,
+    parser.add_argument("--batch_size_target", default=56, type=int,
                         help="batch size of target data")
 
     parser.add_argument("--name_source", default="amazon", type=str,
@@ -59,10 +66,12 @@ def main():
     parser.add_argument("--load_model", default=None, type=None,
                         help="load pretrained model (default None)")
 
+    parser.add_argument("--adapt_domain", action='store_true',
+                        help="argument to compute coral loss (default False)")
 
     args = parser.parse_args()
 
-    # create dataloaders (Amazon as source and Webcam as target)
+    # create dataloaders (Amazon --> source, Webcam --> target)
     print("creating source/target dataloaders...")
     print("source data:", args.name_source)
     print("target data:", args.name_target)
@@ -73,26 +82,8 @@ def main():
     target_loader = get_office_dataloader(name_dataset = args.name_target,
                                           batch_size = args.batch_size_target)
 
-    # define DeepCORAL network
-    bottleneck_dim = 256
-    model = baseNetwork(num_classes=args.num_classes,bottleneck_dim=bottleneck_dim)
-    # model = network.AlexNetFc(use_bottleneck=True, bottleneck_dim=256, new_cls=True)
-    ad_net = AdversarialNetwork(bottleneck_dim*args.num_classes,1024)
-    model.train(True)
-    ad_net.train(True)
-    # define optimizer pytorch: https://pytorch.org/docs/stable/optim.html
-    # specify learning rates per layers:
-    # 10*learning_rate for last two fc layers according to paper
-    optimizer = torch.optim.SGD([
-        {"params": model.sharedNetwork.parameters()},
-        {"params": model.fc8.parameters(), "lr":10*LEARNING_RATE},
-        {"params":ad_net.parameters(), "lr_mult": 10, 'decay_mult': 2}
-    ], lr=LEARNING_RATE, momentum=MOMENTUM)
-    # optimizer = torch.optim.SGD([
-    #     {"params": model.sharedNetwork.parameters()},
-    #     {"params": model.fc8.parameters(), "lr":10*LEARNING_RATE},
-    # ], lr=LEARNING_RATE, momentum=MOMENTUM)
-
+    # define DDCNet model
+    model = DDCNet(num_classes=args.num_classes)
 
     # move to CUDA if available
     if CUDA:
@@ -108,31 +99,48 @@ def main():
     print("model type:", type(model))
 
     # store statistics of train/test
-    training_s_statistic = []
+    training_statistic = []
     testing_s_statistic = []
     testing_t_statistic = []
 
     # start training over epochs
+    print("adapt domain:", args.adapt_domain)
     print("running training for {} epochs...".format(args.epochs))
-    for epoch in range(0, args.epochs):
+
+    for epoch in tnrange(0, args.epochs):
+
+        log_interval = 10
+        LEARNING_RATE = step_decay(epoch, learning_rate)
+        print("Current learning rate:", LEARNING_RATE)
+
+        optimizer = torch.optim.SGD([
+            {"params": model.sharedNetwork.parameters()},
+            {"params": model.bottleneck.parameters(),  "lr":LEARNING_RATE},
+            {"params": model.fc8.parameters(), "lr":LEARNING_RATE},
+        ], lr=LEARNING_RATE/10, momentum=MOMENTUM, weight_decay=L2_DECAY)
+
         # compute lambda value from paper (eq 6)
-        lambda_factor = (epoch+1)/args.epochs
+        if args.adapt_domain:
+            lambda_factor = (epoch+1)/args.epochs # adaptation (w/ coral loss)
+
+        else:
+            lambda_factor = 0 # no adaptation (w/o coral loss)
 
         # run batch trainig at each epoch (returns dictionary with epoch result)
-        result_train = train(model, ad_net, source_loader, target_loader,
+        result_train = train(model, source_loader, target_loader,
                              optimizer, epoch+1, lambda_factor, CUDA)
 
         # print log values
-        print("[EPOCH] {}: Classification: {:.6f}, CDAN loss: {:.6f}, Total_Loss: {:.6f}".format(
+        print("[EPOCH] {}: Classification loss: {:.6f}, DDC loss: {:.6f}, Total_Loss: {:.6f}".format(
                 epoch+1,
                 sum(row['classification_loss'] / row['total_steps'] for row in result_train),
-                sum(row['cdan_loss'] / row['total_steps'] for row in result_train),
+                sum(row['ddc_loss'] / row['total_steps'] for row in result_train),
                 sum(row['total_loss'] / row['total_steps'] for row in result_train),
             ))
 
-        training_s_statistic.append(result_train)
+        training_statistic.append(result_train)
 
-        # perform testing simultaneously: classification accuracy on both dataset
+        # test classification accuracy on both datasets
         test_source = test(model, source_loader, epoch, CUDA)
         test_target = test(model, target_loader, epoch, CUDA)
         testing_s_statistic.append(test_source)
@@ -154,15 +162,20 @@ def main():
                 test_target['accuracy %'],
         ))
 
-    # save results
-    print("saving results...")
-    # save_log(training_s_statistic, 'CDAN_amz_dslr/no_adaptation_training_s_statistic.pkl')
-    # save_log(testing_s_statistic, 'CDAN_amz_dslr/no_adaptation_testing_s_statistic.pkl')
-    # save_log(testing_t_statistic, 'CDAN_amz_dslr/no_adaptation_testing_t_statistic.pkl')
-    save_log(training_s_statistic, 'CDAN_amz_dslr/training_s_statistic.pkl')
-    save_log(testing_s_statistic, 'CDAN_amz_dslr/testing_s_statistic.pkl')
-    save_log(testing_t_statistic, 'CDAN_amz_dslr/testing_t_statistic.pkl')
-    save_model(model, 'checkpoint.tar')
+    # save log results
+    if args.adapt_domain:
+        print("saving training with adaptation...")
+        save_log(training_statistic, 'adaptation_training_statistic.pkl')
+        save_log(testing_s_statistic, 'adaptation_testing_s_statistic.pkl')
+        save_log(testing_t_statistic, 'adaptation_testing_t_statistic.pkl')
+        save_model(model, 'adaptation_checkpoint.tar')
+
+    else:
+        print("saving training without adaptation...")
+        save_log(training_statistic, 'no_adaptation_training_statistic.pkl')
+        save_log(testing_s_statistic, 'no_adaptation_testing_s_statistic.pkl')
+        save_log(testing_t_statistic, 'no_adaptation_testing_t_statistic.pkl')
+        save_model(model, 'no_adaptation_checkpoint.tar')
 
 
 if __name__ == '__main__':

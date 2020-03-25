@@ -49,6 +49,7 @@ def CDAN(input_list, ad_net, entropy=None, coeff=None, random_layer=None):
     else:
         return nn.BCELoss()(ad_out, dc_target)
 
+
 def DANN(features, ad_net):
     ad_out = ad_net(features)
     batch_size = ad_out.size(0) // 2
