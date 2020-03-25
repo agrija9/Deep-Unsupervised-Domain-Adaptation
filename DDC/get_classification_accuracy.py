@@ -40,7 +40,7 @@ def get_classification_accuracy(source, target, no_epochs):
     # (w coral loss)
     adaptation = {
         "classification_loss": [],
-        "coral_loss": [],
+        "ddc_loss": [],
         "source_accuracy": [],
         "target_accuracy": []
     }
@@ -57,7 +57,9 @@ def get_classification_accuracy(source, target, no_epochs):
 
     print(">>>Object recognition accuracy (mean) for {0} source and {1} target<<<".format(source, target))
     avg_accuracy = statistics.mean(adaptation["target_accuracy"])
+    std_deviation = statistics.stdev(adaptation["target_accuracy"])
     print(avg_accuracy)
+    print(std_deviation)
 
 
     # plot accuracies for test data in source and target domains
@@ -66,7 +68,7 @@ def get_classification_accuracy(source, target, no_epochs):
 
     plt.xlabel("epochs", fontsize=15)
     plt.ylabel("classification accuracy (%)", fontsize=15)
-    plt.plot(adaptation['target_accuracy'], label="test acc. w/ coral loss", marker='*', markersize=8)
+    plt.plot(adaptation['target_accuracy'], label="test acc. w/ ddc loss", marker='*', markersize=8)
     plt.legend(loc="best")
     plt.grid()
     plt.show()

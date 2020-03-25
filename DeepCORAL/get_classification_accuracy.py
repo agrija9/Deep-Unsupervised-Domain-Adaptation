@@ -57,8 +57,9 @@ def get_classification_accuracy(source, target, no_epochs):
 
     print(">>>Object recognition accuracy (mean) for {0} source and {1} target<<<".format(source, target))
     avg_accuracy = statistics.mean(adaptation["target_accuracy"])
+    std_deviation = statistics.stdev(adaptation["target_accuracy"])
     print(avg_accuracy)
-
+    print(std_deviation)
 
     # plot accuracies for test data in source and target domains
     fig=plt.figure(figsize=(8, 6), dpi=100)

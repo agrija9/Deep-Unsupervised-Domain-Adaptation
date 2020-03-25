@@ -1,9 +1,9 @@
 source, target, accuracy(%);
-amazon, dslr, 40.04;
-amazon, webcam, 49.48;
-dslr, amazon, 38.54;
-dslr, webcam, 89.10;
-webcam, amazon, 38.26;
-webcam, dslr, 74.36;
+amazon, webcam, 49.48 +- 2.69;
+amazon, dslr, 40.04 +- 3.33;
+webcam, amazon, 38.26 +- 0.39;
+webcam, dslr, 74.36 +- 4.34;
+dslr, amazon, 38.54 +- 1.48;
+dslr, webcam, 89.10 +- 4.36;
 --------------------
 average accuracy 54.96

@@ -17,6 +17,7 @@ Modified on Saturday Mar 21 2020
 @authors: Alan Preciado, Santosh Muthireddy
 """
 def plot_loss_acc(source, target, no_epochs):
+    plt.rcParams.update({'font.size': 22})
 
     # specify path where in log folder where training logs are saved
     pkldir = os.path.join("logs", source + "_to_" + target,
@@ -91,14 +92,14 @@ def plot_loss_acc(source, target, no_epochs):
     fig=plt.figure(figsize=(8, 6), dpi=100)
     fig.show()
 
-    plt.xlabel("epochs", fontsize=15)
-    plt.ylabel("classification accuracy (%)", fontsize=15)
+    plt.xlabel("epochs", fontsize=25)
+    plt.ylabel("classification accuracy (%)", fontsize=25)
 
-    plt.plot(adaptation['target_accuracy'], label="test acc. w/ coral loss", marker='*', markersize=8)
-    plt.plot(no_adaptation['target_accuracy'], label="test acc. w/o coral loss", marker='.', markersize=8)
+    plt.plot(adaptation['target_accuracy'], label="test acc. w/ coral loss", marker='*', markersize=14)
+    plt.plot(no_adaptation['target_accuracy'], label="test acc. w/o coral loss", marker='.', markersize=14)
 
-    plt.plot(adaptation['source_accuracy'], label="training acc. w/ coral loss", marker='^', markersize=8)
-    plt.plot(no_adaptation['source_accuracy'], label="training acc. w/o coral loss", marker='+', markersize=8)
+    plt.plot(adaptation['source_accuracy'], label="training acc. w/ coral loss", marker='^', markersize=14)
+    plt.plot(no_adaptation['source_accuracy'], label="training acc. w/o coral loss", marker='+', markersize=14)
 
     plt.legend(loc="best")
     plt.grid()
@@ -110,11 +111,11 @@ def plot_loss_acc(source, target, no_epochs):
     fig=plt.figure(figsize=(8, 6), dpi=100)
     fig.show()
 
-    plt.xlabel("epochs", fontsize=15)
-    plt.ylabel("loss", fontsize=15)
+    plt.xlabel("epochs", fontsize=25)
+    plt.ylabel("loss", fontsize=25)
 
-    plt.plot(adaptation["classification_loss"], label="classification_loss", marker='*', markersize=8)
-    plt.plot(adaptation["coral_loss"], label="coral_loss", marker='.', markersize=8)
+    plt.plot(adaptation["classification_loss"], label="classification_loss", marker='*', markersize=14)
+    plt.plot(adaptation["coral_loss"], label="coral_loss", marker='.', markersize=14)
 
     plt.legend(loc="best")
     plt.grid()
