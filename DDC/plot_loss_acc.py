@@ -53,15 +53,15 @@ def plot_loss_acc(source, target, no_epochs):
 
     # create dictionary structures for adaptation and no-adaptation results
 
-    # (w coral loss)
+    # (w ddc loss)
     adaptation = {
         "classification_loss": [],
-        "coral_loss": [],
+        "ddc_loss": [],
         "source_accuracy": [],
         "target_accuracy": []
     }
 
-    # (w/o coral loss)
+    # (w/o ddc loss)
     no_adaptation = {
         "source_accuracy": [],
         "target_accuracy": []
@@ -70,16 +70,16 @@ def plot_loss_acc(source, target, no_epochs):
     # get average coral and classification loss for steps in each epoch
     # get accuracy obtained in each epoch
     for epoch_idx in range(len(adapt_training_dict)): # epoch
-        coral_loss = 0
+        ddc_loss = 0
         class_loss = 0
 
         for step_idx in range(len(adapt_training_dict[epoch_idx])):
-            coral_loss += adapt_training_dict[epoch_idx][step_idx]["coral_loss"]
+            ddc_loss += adapt_training_dict[epoch_idx][step_idx]["ddc_loss"]
             class_loss += adapt_training_dict[epoch_idx][step_idx]["classification_loss"]
 
         # store average losses in general adaptation dictionary
         adaptation["classification_loss"].append(class_loss/len(adapt_training_dict[epoch_idx]))
-        adaptation["coral_loss"].append(coral_loss/len(adapt_training_dict[epoch_idx]))
+        adaptation["ddc_loss"].append(ddc_loss/len(adapt_training_dict[epoch_idx]))
         adaptation["source_accuracy"].append(adapt_testing_source_dict[epoch_idx]["accuracy %"])
         adaptation["target_accuracy"].append(adapt_testing_target_dict[epoch_idx]["accuracy %"])
 
@@ -94,16 +94,16 @@ def plot_loss_acc(source, target, no_epochs):
     plt.xlabel("epochs", fontsize=15)
     plt.ylabel("classification accuracy (%)", fontsize=15)
 
-    plt.plot(adaptation['target_accuracy'], label="test acc. w/ coral loss", marker='*', markersize=8)
-    plt.plot(no_adaptation['target_accuracy'], label="test acc. w/o coral loss", marker='.', markersize=8)
+    plt.plot(adaptation['target_accuracy'], label="test acc. w/ ddc loss", marker='*', markersize=8)
+    plt.plot(no_adaptation['target_accuracy'], label="test acc. w/o ddc loss", marker='.', markersize=8)
 
-    plt.plot(adaptation['source_accuracy'], label="training acc. w/ coral loss", marker='^', markersize=8)
-    plt.plot(no_adaptation['source_accuracy'], label="training acc. w/o coral loss", marker='+', markersize=8)
+    plt.plot(adaptation['source_accuracy'], label="training acc. w/ ddc loss", marker='^', markersize=8)
+    plt.plot(no_adaptation['source_accuracy'], label="training acc. w/o ddc loss", marker='+', markersize=8)
 
     plt.legend(loc="best")
     plt.grid()
     plt.show()
-    source + "_to_" + target
+    fig.suptitle(source + "_to_" + target)
     fig.savefig(os.path.join(pkldir, source + "_to_" + target + "_test_train_accuracies.jpg"))
 
     # plot losses for test data in source and target domains
@@ -114,11 +114,12 @@ def plot_loss_acc(source, target, no_epochs):
     plt.ylabel("loss", fontsize=15)
 
     plt.plot(adaptation["classification_loss"], label="classification_loss", marker='*', markersize=8)
-    plt.plot(adaptation["coral_loss"], label="coral_loss", marker='.', markersize=8)
+    plt.plot(adaptation["ddc_loss"], label="ddc_loss", marker='.', markersize=8)
 
     plt.legend(loc="best")
     plt.grid()
     plt.show()
+    fig.suptitle(source + "_to_" + target)
     fig.savefig(os.path.join(pkldir, source + "_to_" + target + "_train_losses.jpg"))
 
 
