@@ -26,7 +26,7 @@ Target accuracies for all six domain shifts in Office31 dataset (amazon, webcam 
 
 | Method         | A &#8594; W   | A &#8594; D     | W &#8594; A    | W &#8594; D  | D &#8594; A | D &#8594; W |
 | :---:          |  :---:        |     :---:        |    :---:       |  :---:       | :---:       | :---:       |   
-| No Adaptaion   | 43 $\pm$ 2.5             |     a        |    a       |  a       | a       | a       |   
+| No Adaptaion   | 43.1 ± 2.5             |     a        |    a       |  a       | a       | a       |   
 | DeepCORAL      | git status    | git status       | git status     | git          |  git        | git         |
 | DDC            | git diff      | git diff         | git diff       | git          |             |             |
 | CDAN           | git diff      | git diff         | git diff       | git          |             |             |
