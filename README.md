@@ -24,12 +24,12 @@ CDAN             |  CDAN+E
 
 Target accuracies for all six domain shifts in Office31 dataset (amazon, webcam and dslr)
 
-|                | A &#8594; W   | A &#8594; D     | W &#8594; A    | W &#8594; D  | D &#8594; A | D &#8594; W |
-| No Adaptaion   |  :---:       |     :---:      |    :---:      |  :---:      | :---:      | :---:      |   
-| DeepCORAL      | git status   | git status     | git status    | git         |  git       | git        |
-| DDC            | git diff     | git diff       | git diff      |             |            |            |
-| CDAN           | git diff     | git diff       | git diff      |             |            |            |
-| CDAN+E         | git diff     | git diff       | git diff      |             |            |            |
+| Method         | A &#8594; W   | A &#8594; D     | W &#8594; A    | W &#8594; D  | D &#8594; A | D &#8594; W |
+| No Adaptaion   |  :---:       |     :---:        |    :---:       |  :---:       | :---:       | :---:       |   
+| DeepCORAL      | git status   | git status       | git status     | git          |  git        | git         |
+| DDC            | git diff     | git diff         | git diff       | git          |             |             |
+| CDAN           | git diff     | git diff         | git diff       | git          |             |             |
+| CDAN+E         | git diff     | git diff         | git diff       | git          |             |             |
 
 
 
