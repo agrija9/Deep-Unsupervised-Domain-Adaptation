@@ -43,7 +43,7 @@ Execute training of a method by going to its folder (e.g. DeepCORAL):
 
 ```
 cd DeepCORAL/
-python main.py
+python main.py --epochs 100 --batch_size_source 128 --batch_size_target 128 --name_source amazon --name_target webcam
 ```
 
 **Loss and accuracy plots**
@@ -53,8 +53,23 @@ Once the model is trained, you can generate plots like the ones shown above by r
 
 ```
 cd DeepCORAL/
-python plot_loss_acc.py
+python plot_loss_acc.py --epochs 100 --batch_size_source 128 --batch_size_target 128 --name_source amazon --name_target webcam
 ```
+
+The following is a list of the arguments the usuer can provide:
+
+```--epochs``` number of training epochs
+```--batch_size_source``` batch size of source data
+```--batch_size_target``` batch size of target data
+```--name_source``` name of source dataset
+```--name_target``` name of source dataset
+```--num_classes``` no. classes in dataset
+```--load_model``` flag to load pretrained model (AlexNet by default)
+```--adapt_domain``` bool argument to train with or without specific transfer loss
 
 **References**
 ---
+
+- [DeepCORAL](https://arxiv.org/abs/1607.01719) paper
+- [DDC](https://arxiv.org/abs/1412.3474) paper
+- [CDAN](https://arxiv.org/abs/1705.10667) paper
