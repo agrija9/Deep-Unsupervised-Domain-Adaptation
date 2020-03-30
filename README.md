@@ -24,13 +24,11 @@ CDAN             |  CDAN+E
 
 Target accuracies for all six domain shifts in Office31 dataset
 
-| Left-aligned | Center-aligned | Right-aligned | Left-aligned | Center-aligned | Right-aligned |
-| :---         |     :---:      |          ---: |
-| git status   | git status     | git status    |
-| git diff     | git diff       | git diff      |
-| :---         |     :---:      |          ---: |
-| git status   | git status     | git status    |
-| git diff     | git diff       | git diff      |
+| Left-aligned | Center-aligned | Right-aligned | Testing | Testing | Testing
+| :---         |     :---:      |          ---: |         |         |       
+| git status   | git status     | git status    |         |         |
+| git diff     | git diff       | git diff      |         |         |
+
 
 **Training**
 ---
