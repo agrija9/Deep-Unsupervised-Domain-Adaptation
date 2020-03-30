@@ -2,7 +2,7 @@
 
 ---
 
-Pytorch implementation and performance evaluation of four deep neural network based domain adaptation techniques based on: DeepCORAL, DDC, CDAN and CDAN+E.
+Pytorch implementation of four neural network based domain adaptation techniques: DeepCORAL, DDC, CDAN and CDAN+E. Evaluated on benchmark dataset Office31.
 
 **Abstract**
 
@@ -34,8 +34,27 @@ Target accuracies for all six domain shifts in Office31 dataset (amazon, webcam 
 
 
 
-**Training**
+**Training and inference**
 ---
+
+To train the model in your computer you must download the [**Office31**](https://drive.google.com/file/d/0B4IapRTv9pJ1WGZVd1VDMmhwdlE/view) dataset and put it in your data folder. 
+
+Execute training of a method by going to its folder (e.g. DeepCORAL):
+
+```
+cd DeepCORAL/
+python main.py
+```
+
+**Loss and accuracy plots**
+---
+
+Once the model is trained, you can generate plots like the ones shown above by running:
+
+```
+cd DeepCORAL/
+python plot_loss_acc.py
+```
 
 **References**
 ---
