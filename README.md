@@ -58,14 +58,14 @@ python plot_loss_acc.py --epochs 100 --batch_size_source 128 --batch_size_target
 
 The following is a list of the arguments the usuer can provide:
 
-```--epochs``` number of training epochs
-```--batch_size_source``` batch size of source data
-```--batch_size_target``` batch size of target data
-```--name_source``` name of source dataset
-```--name_target``` name of source dataset
-```--num_classes``` no. classes in dataset
-```--load_model``` flag to load pretrained model (AlexNet by default)
-```--adapt_domain``` bool argument to train with or without specific transfer loss
+* ```--epochs``` number of training epochs
+* ```--batch_size_source``` batch size of source data
+* ```--batch_size_target``` batch size of target data
+* ```--name_source``` name of source dataset
+* ```--name_target``` name of source dataset
+* ```--num_classes``` no. classes in dataset
+* ```--load_model``` flag to load pretrained model (AlexNet by default)
+* ```--adapt_domain``` bool argument to train with or without specific transfer loss
 
 **References**
 ---
