@@ -22,12 +22,12 @@ CDAN             |  CDAN+E
 :-------------------------:|:-------------------------:
 ![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/report/images/CDAN_amazon_to_webcam_test_train_accuracies.png)  |  ![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/report/images/CDAN_E_amazon_to_webcam_test_train_accuracies.png)
 
-Target accuracies for all six domain shifts in Office31 dataset
+Target accuracies for all six domain shifts in Office31 dataset (amazon, webcam and dslr)
 
-| Left-aligned | Center-aligned | Right-aligned | Testing | Testing | Testing |
-|  :---:       |     :---:      |    :---:      |  :---:  | :---:   | :---:   |   
-| git status   | git status     | git status    | git     |  git    | git     |
-| git diff     | git diff       | git diff      |         |         |         |
+| A &#8594 W   | A &#8594 D     | W &#8594 A    | W &#8594 D  | D &#8594 A | D &#8594 W |
+|  :---:       |     :---:      |    :---:      |  :---:      | :---:      | :---:      |   
+| git status   | git status     | git status    | git         |  git       | git        |
+| git diff     | git diff       | git diff      |             |            |            |
 
 
 **Training**
