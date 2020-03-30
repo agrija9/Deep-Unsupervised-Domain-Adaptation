@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# TODO: fill README and create appropriate instructions and name for repository
-# TODO: write report
-
 from __future__ import division
 import argparse
 import warnings
