@@ -9,15 +9,6 @@ Pytorch implementation of four neural network based domain adaptation techniques
 > It has been well proved that deep networks are efficient at extracting features from a given (source) labeled dataset.
 However, it is not always the case that they can generalize well to other (target) datasets which very often have a different underlying distribution. In this report, we evaluate four different domain adaptation techniques for image classification tasks: **Deep CORAL**, **Deep Domain Confusion (DDC)**, **Conditional Adversarial Domain Adaptation (CDAN)** and **CDAN with Entropy Conditioning (CDAN+E)**. The selected domain adaptation techniques are unsupervised techniques where the target dataset will not carry any labels during training phase. The experiments are conducted on the office-31 dataset.
 
-**Requirements**
-* tqdm
-* PyTorch
-* matplotlib
-* numpy
-* pickle
-* scikit-image
-* torchvision
-
 **Results**
 ---
 
@@ -75,6 +66,16 @@ The following is a list of the arguments the usuer can provide:
 * ```--num_classes``` no. classes in dataset
 * ```--load_model``` flag to load pretrained model (AlexNet by default)
 * ```--adapt_domain``` bool argument to train with or without specific transfer loss
+
+**Requirements**
+* tqdm
+* PyTorch
+* matplotlib
+* numpy
+* pickle
+* scikit-image
+* torchvision
+---
 
 **References**
 ---
