@@ -68,6 +68,7 @@ The following is a list of the arguments the usuer can provide:
 * ```--adapt_domain``` bool argument to train with or without specific transfer loss
 
 **Requirements**
+---
 * tqdm
 * PyTorch
 * matplotlib
@@ -75,7 +76,6 @@ The following is a list of the arguments the usuer can provide:
 * pickle
 * scikit-image
 * torchvision
----
 
 **References**
 ---
