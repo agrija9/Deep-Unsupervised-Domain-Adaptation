@@ -53,7 +53,7 @@ Once the model is trained, you can generate plots like the ones shown above by r
 
 ```
 cd DeepCORAL/
-python plot_loss_acc.py --epochs 100 --batch_size_source 128 --batch_size_target 128 --name_source amazon --name_target webcam
+python plot_loss_acc.py --source amazon --target webcam --no_epochs 10
 ```
 
 The following is a list of the arguments the usuer can provide:
