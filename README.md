@@ -4,6 +4,8 @@
 
 Pytorch implementation of four neural network based domain adaptation techniques: DeepCORAL, DDC, CDAN and CDAN+E. Evaluated on benchmark dataset Office31.
 
+Paper: [Evaluation of Deep Neural Network Domain Adaptation Techniques for Image Recognition](https://arxiv.org/abs/2109.13420)
+
 **Abstract**
 
 > It has been well proved that deep networks are efficient at extracting features from a given (source) labeled dataset.
@@ -16,11 +18,11 @@ Accuracy performance on the Office31 dataset for the source and domain data dist
 
 Deep CORAL             |  DDC
 :-------------------------:|:-------------------------:
-![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/report/images/DEEP_CORAL_amazon_to_webcam_test_train_accuracies.jpg)  |  ![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/report/images/DDC_amazon_to_webcam_test_train_accuracies.jpg)
+![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/images/DEEP_CORAL_amazon_to_webcam_test_train_accuracies.jpg)  |  ![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/images/DDC_amazon_to_webcam_test_train_accuracies.jpg)
 
 CDAN             |  CDAN+E
 :-------------------------:|:-------------------------:
-![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/report/images/CDAN_amazon_to_webcam_test_train_accuracies.png)  |  ![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/report/images/CDAN_E_amazon_to_webcam_test_train_accuracies.png)
+![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/images/CDAN_amazon_to_webcam_test_train_accuracies.png)  |  ![](https://github.com/agrija9/Deep-Unsupervised-Domain-Adaptation/blob/master/images/CDAN_E_amazon_to_webcam_test_train_accuracies.png)
 
 Target accuracies for all six domain shifts in Office31 dataset (amazon, webcam and dslr)
 
