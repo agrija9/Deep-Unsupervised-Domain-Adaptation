@@ -3,3 +3,6 @@ datasets/
 .ipynb_checkpoints/
 __pycache__/
 testing.ipynb
+arXiv/
+presentation/
+report/
